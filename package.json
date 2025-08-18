@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "build": "tsc",
+  "start": "node dist/index.js",
+  "dev": "nodemon --watch src --exec ts-node src/index.ts"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Narvdeshwar/Restaurant-Backend.git"
@@ -18,6 +20,7 @@
   "homepage": "https://github.com/Narvdeshwar/Restaurant-Backend#readme",
   "description": "",
   "dependencies": {
+    "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "mongoose": "^8.17.1"
   },
