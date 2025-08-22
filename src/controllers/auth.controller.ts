@@ -1,5 +1,4 @@
-import { NextFunction, Request, Response } from "express";
-import { signupDTO } from "../dto/auth.dto";
+import { loginDTO, signupDTO } from "../dto/auth.dto";
 import { successResponse } from "../utils/response";
 import * as userServices from "../services/user.services"
 import { Controller } from "../types/expressRouteHandlerTypes";
@@ -14,4 +13,12 @@ export const signup: Controller = async (req, res, next) => {
   }
 };
 
-// export const login = async()
+export const login: Controller = async (req, res, next) => {
+  try {
+    const { email, password } = req.body as loginDTO;
+    const user = await userServices.login({ email, password });
+    return successResponse(res, "Login successfull", 200)
+  } catch (error) {
+
+  }
+}

@@ -1,4 +1,4 @@
-import { signupDTO } from "../dto/auth.dto";
+import { loginDTO, signupDTO } from "../dto/auth.dto";
 import User from "../models/user.models";
 import { ApiError } from "../utils/ApiError";
 
@@ -7,5 +7,12 @@ export const createUser = async ({ name, email, password, role }: signupDTO) => 
     const isEmailRegistered = await User.findOne({ email });
     if (isEmailRegistered) throw new ApiError(409, "Email is already registered!");
     const user = await User.create({ email, password, name, role })
+    return user;
+}
+
+export const login = async ({ email, password }: loginDTO) => {
+    const user = await User.findOne({ email });
+    if (!user) throw new ApiError(404, "user doesn't exits")
+    if (user.password != password) throw new ApiError(404, "You have entered the wrong password!")
     return user;
 }
