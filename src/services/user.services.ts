@@ -16,3 +16,9 @@ export const login = async ({ email, password }: loginDTO) => {
     if (user.password != password) throw new ApiError(404, "You have entered the wrong password!")
     return user;
 }
+
+export const getAllUser = async () => {
+    const user = await User.find().select("-password");
+    if (user.length===0) throw new ApiError(404, "No user found");
+    return user;
+}

@@ -19,6 +19,16 @@ export const login: Controller = async (req, res, next) => {
     const user = await userServices.login({ email, password });
     return successResponse(res, "Login successfull", 200)
   } catch (error) {
+    return next(error)
+  }
+}
 
+export const getAllUser: Controller = async (req, res, next) => {
+  try {
+    const user = await userServices.getAllUser();
+    return successResponse(res, "All user data fetched", user, 200)
+  }
+  catch (error) {
+    return next(error)
   }
 }
