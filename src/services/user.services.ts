@@ -19,6 +19,16 @@ export const login = async ({ email, password }: loginDTO) => {
 
 export const getAllUser = async () => {
     const user = await User.find().select("-password");
-    if (user.length===0) throw new ApiError(404, "No user found");
+    if (user.length === 0) throw new ApiError(404, "No user found");
     return user;
+}
+
+export const getUserById = async (id: string) => {
+    const user = await User.findById(id)
+    if (!user) throw new ApiError(404, "User doesn't found associated with this ID");
+    return user;
+}
+
+export const updateUserDetail = async () => {
+
 }

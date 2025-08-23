@@ -2,6 +2,9 @@ import { loginDTO, signupDTO } from "../dto/auth.dto";
 import { successResponse } from "../utils/response";
 import * as userServices from "../services/user.services"
 import { Controller } from "../types/expressRouteHandlerTypes";
+import User from "../models/user.models";
+import { idValidator } from "../utils/idValidator";
+console.log("testing")
 
 export const signup: Controller = async (req, res, next) => {
   try {
@@ -30,5 +33,28 @@ export const getAllUser: Controller = async (req, res, next) => {
   }
   catch (error) {
     return next(error)
+  }
+}
+
+export const getUserById: Controller = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    idValidator(userId)
+    const user = await userServices.getUserById(userId);
+    return successResponse(res, "User found successfully", user, 200);
+  } catch (error) {
+    return next(error)
+  }
+}
+
+export const updateUserDetail: Controller = async (req, res, next) => {
+  try {
+    console.log("is code reaching here");
+    const userId = req.params.id;
+    console.log("User is", userId)
+
+    const user = await userServices.updateUserDetail();
+  } catch (error) {
+
   }
 }
