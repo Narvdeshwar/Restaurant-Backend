@@ -1,6 +1,7 @@
 import { loginDTO, signupDTO } from "../dto/auth.dto";
 import User from "../models/user.models";
 import { ApiError } from "../utils/ApiError";
+import { validEntity } from "../utils/validEntity";
 
 export const createUser = async ({ name, email, password, role }: signupDTO) => {
     // first check where the current email is already used ?
@@ -24,11 +25,14 @@ export const getAllUser = async () => {
 }
 
 export const getUserById = async (id: string) => {
-    const user = await User.findById(id)
+    const user = await User.findById(id).select("-password")
     if (!user) throw new ApiError(404, "User doesn't found associated with this ID");
     return user;
 }
 
-export const updateUserDetail = async () => {
-
+export const updateUserDetails = async (name: string, password: string, userId: string) => {
+    validEntity(name, "Name");
+    validEntity(password, "Password");
+    const user = await User.findByIdAndUpdate({ _id: userId }, { name, password }, { new: true });
+    return user;
 }

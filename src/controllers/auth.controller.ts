@@ -2,8 +2,8 @@ import { loginDTO, signupDTO } from "../dto/auth.dto";
 import { successResponse } from "../utils/response";
 import * as userServices from "../services/user.services"
 import { Controller } from "../types/expressRouteHandlerTypes";
-import User from "../models/user.models";
-import { idValidator } from "../utils/idValidator";
+import { isValidObjectId } from "mongoose";
+import { ApiError } from "../utils/ApiError";
 console.log("testing")
 
 export const signup: Controller = async (req, res, next) => {
@@ -39,7 +39,8 @@ export const getAllUser: Controller = async (req, res, next) => {
 export const getUserById: Controller = async (req, res, next) => {
   try {
     const userId = req.params.id;
-    idValidator(userId)
+    const validObjectId = isValidObjectId(userId)
+    if (!validObjectId) throw new ApiError(422, "Invalid object id");
     const user = await userServices.getUserById(userId);
     return successResponse(res, "User found successfully", user, 200);
   } catch (error) {
@@ -47,14 +48,16 @@ export const getUserById: Controller = async (req, res, next) => {
   }
 }
 
-export const updateUserDetail: Controller = async (req, res, next) => {
+export const updateUserDetails: Controller = async (req, res, next) => {
   try {
-    console.log("is code reaching here");
     const userId = req.params.id;
-    console.log("User is", userId)
-
-    const user = await userServices.updateUserDetail();
+    const { name, password } = req.body;
+    const validObjectId = isValidObjectId(userId)
+    if (!validObjectId) throw new ApiError(422, "Invalid object Id");
+    const user = await userServices.updateUserDetails(name, password, userId);
+    return successResponse(res, "User details fetched successfully", user, 200);
   } catch (error) {
-
+    return next(error)
   }
 }
+
