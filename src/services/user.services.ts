@@ -36,3 +36,9 @@ export const updateUserDetails = async (name: string, password: string, userId: 
     const user = await User.findByIdAndUpdate({ _id: userId }, { name, password }, { new: true });
     return user;
 }
+
+export const deleteUser = async (id: string) => {
+    const user = await User.deleteOne({ _id: id });
+    if (user.deletedCount === 0) throw new ApiError(404, "User doesn't exits with associated Id");
+    return true;
+}

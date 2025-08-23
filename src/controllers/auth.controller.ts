@@ -55,9 +55,19 @@ export const updateUserDetails: Controller = async (req, res, next) => {
     const validObjectId = isValidObjectId(userId)
     if (!validObjectId) throw new ApiError(422, "Invalid object Id");
     const user = await userServices.updateUserDetails(name, password, userId);
-    return successResponse(res, "User details fetched successfully", user, 200);
+    return successResponse(res, "User details updated successfully", user, 200);
   } catch (error) {
     return next(error)
   }
 }
 
+export const deleteUser: Controller = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const user = await userServices.deleteUser(userId);
+    if (user)
+      return successResponse(res, "User deleted successfully", {}, 200);
+  } catch (error) {
+    return next(error)
+  }
+}
