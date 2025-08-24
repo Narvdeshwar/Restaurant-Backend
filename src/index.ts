@@ -10,6 +10,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 app.use(express.json());
 
 app.use("/", authRouter);
+app.use("")
 
 app.use(errorHandler);
 

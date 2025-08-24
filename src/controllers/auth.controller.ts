@@ -4,7 +4,6 @@ import * as userServices from "../services/user.services"
 import { Controller } from "../types/expressRouteHandlerTypes";
 import { isValidObjectId } from "mongoose";
 import { ApiError } from "../utils/ApiError";
-console.log("testing")
 
 export const signup: Controller = async (req, res, next) => {
   try {
