@@ -15,3 +15,13 @@ export const createRestaurant: Controller = async (req, res, next) => {
         return next(error)
     }
 }
+
+export const getAllRestaurant: Controller = async (req, res, next) => {
+    try {
+        const restaurant = await restaurantServices.getAllRestaurant();
+        return successResponse(res, "Restuarant fetched Successfully", restaurant, 200)
+
+    } catch (error) {
+        return next(error)
+    }
+}
