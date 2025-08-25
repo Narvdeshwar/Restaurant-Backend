@@ -11,3 +11,9 @@ export const getAllRestaurant = async () => {
     if (!restaurant) throw new ApiError(404, "No restaurant found");
     return restaurant
 }
+
+export const getResturantById = async (restaurantId: string) => {
+    const restaurant = await Restaurant.findById(restaurantId);
+    if (!restaurant) throw new ApiError(404, "No Restaurant account is assciated with this Id");
+    return restaurant;
+}
