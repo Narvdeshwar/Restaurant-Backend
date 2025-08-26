@@ -40,3 +40,20 @@ export const getResturantById: Controller = async (req, res, next) => {
         next(error)
     }
 }
+
+export const updateResturantById: Controller = async (req, res, next) => {
+    try {
+        const restaurantId = req.params.id;
+        if (!isValidObjectId(restaurantId)) throw new ApiError(400, "Invalid Object id!");
+        if (!restaurantId) throw new ApiError(404, "Object id is required");
+        const { name, address, cuisine } = req.body;
+        if (!name) {
+            validEntity(name, "Name")
+        }
+        if (!address)
+            validEntity(address, "Address")
+        const updatedData = await restaurantServices.updateResturantById();
+    } catch (error) {
+
+    }
+}
