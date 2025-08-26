@@ -17,3 +17,7 @@ export const getResturantById = async (restaurantId: string) => {
     if (!restaurant) throw new ApiError(404, "No Restaurant account is assciated with this Id");
     return restaurant;
 }
+
+export const updateResturantById=async()=>{
+    
+}
