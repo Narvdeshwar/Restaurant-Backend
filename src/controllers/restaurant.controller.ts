@@ -20,8 +20,6 @@ export const createRestaurant: Controller = async (req, res, next) => {
 
 export const getAllRestaurant: Controller = async (req, res, next) => {
     try {
-        console.log("Api called");
-
         const restaurant = await restaurantServices.getAllRestaurant();
         return successResponse(res, "Restuarant fetched Successfully", restaurant, 200)
 
@@ -46,14 +44,20 @@ export const updateResturantById: Controller = async (req, res, next) => {
         const restaurantId = req.params.id;
         if (!isValidObjectId(restaurantId)) throw new ApiError(400, "Invalid Object id!");
         if (!restaurantId) throw new ApiError(404, "Object id is required");
-        const { name, address, cuisine } = req.body;
-        if (!name) {
+        const updates: Partial<{ name: String, address: String }> = {}
+        const { name, address } = req.body;
+        // this is basically checking that whether my key coming from the front-end user is defined or not
+        if (name !== undefined) { // this condition is check the my key is defined now if it is defined whether it is empty or not
             validEntity(name, "Name")
+            updates.name = name;
         }
-        if (!address)
+        if (address !== undefined) {
             validEntity(address, "Address")
-        const updatedData = await restaurantServices.updateResturantById();
+            updates.address = address;
+        }
+        const updatedData = await restaurantServices.updateResturantById(name, address, restaurantId);
+        return successResponse(res, "Data updated successfully", updatedData, 200)
     } catch (error) {
-
+        next(error)
     }
 }

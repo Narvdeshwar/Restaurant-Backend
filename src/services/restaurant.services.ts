@@ -18,6 +18,10 @@ export const getResturantById = async (restaurantId: string) => {
     return restaurant;
 }
 
-export const updateResturantById=async()=>{
-    
+export const updateResturantById = async (name: string, address: string, RestaurantId: string) => {
+    const data = await Restaurant.findByIdAndUpdate({ _id: RestaurantId }, { name, address }, { new: true })
+    console.log("dfadf", data);
+
+    if (!data) throw new ApiError(500, "unable to update the Data")
+    return data;
 }
