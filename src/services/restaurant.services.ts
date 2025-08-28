@@ -20,8 +20,12 @@ export const getResturantById = async (restaurantId: string) => {
 
 export const updateResturantById = async (name: string, address: string, RestaurantId: string) => {
     const data = await Restaurant.findByIdAndUpdate({ _id: RestaurantId }, { name, address }, { new: true })
-    console.log("dfadf", data);
-
     if (!data) throw new ApiError(500, "unable to update the Data")
+    return data;
+}
+
+export const delteRestaurantById = async (RestaurantId: string) => {
+    const data = await Restaurant.findByIdAndDelete({ _id: RestaurantId })
+    if (!data) throw new ApiError(500, "Id doesn't exits")
     return data;
 }

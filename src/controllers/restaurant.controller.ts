@@ -61,3 +61,15 @@ export const updateResturantById: Controller = async (req, res, next) => {
         next(error)
     }
 }
+
+export const delteRestaurantById: Controller = async (req, res, next) => {
+    try {
+        const RestaurantId = req.params.id;
+        if (!isValidObjectId(RestaurantId)) throw new ApiError(422, "Invalid object Id");
+        if (!isValidObjectId) throw new ApiError(422, "Object id is required");
+        const data = await restaurantServices.delteRestaurantById(RestaurantId)
+        return successResponse(res, "Restaurant deleted successfully", data, 200)
+    } catch (error) {
+        next(error)
+    }
+}
