@@ -7,11 +7,13 @@ const PORT = process.env.PORT;
 import authRouter from "./routes/auth.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import restaurantRoute from "./routes/restaurant.routes";
+import menuRoutes from "./routes/menu.routes";
 
 app.use(express.json());
 
 app.use("/", authRouter);
-app.use("/",restaurantRoute)
+app.use("/", restaurantRoute)
+app.use("/", menuRoutes)
 
 app.use(errorHandler);
 
