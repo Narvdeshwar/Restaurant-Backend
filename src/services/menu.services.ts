@@ -1,5 +1,5 @@
-import Menu from "../models/menu.models";
-import { ApiError } from "../utils/ApiError";
+import Menu from "@/models/menu.models";
+import { ApiError } from "@/utils/ApiError";
 
 interface ItemsProps {
     name: String,

@@ -1,9 +1,9 @@
-import { Controller } from "../types/expressRouteHandlerTypes";
-import { successResponse } from "../utils/response";
-import * as menuServices from "../services/menu.services"
+import { Controller } from "@/types/expressRouteHandlerTypes";
+import { successResponse } from "@/utils/response";
+import * as menuServices from "@/services/menu.services"
 import { isValidObjectId } from "mongoose";
-import { ApiError } from "../utils/ApiError";
-import { validEntity } from "../utils/validEntity";
+import { ApiError } from "@/utils/ApiError";
+import { validEntity } from "@/utils/validEntity";
 
 export const createMenu: Controller = async (req, res, next) => {
     try {

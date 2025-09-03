@@ -5,7 +5,7 @@
   "scripts": {
   "build": "tsc",
   "start": "node dist/index.js",
-  "dev": "nodemon --watch src --exec ts-node src/index.ts"
+  "dev": "nodemon --watch src --exec ts-node -r tsconfig-paths/register src/index.ts"
 },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "@types/node": "^24.3.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   }
 }
