@@ -76,8 +76,18 @@ export const updateMenuItem: Controller = async (req, res, next) => {
 
 export const deleteMenuItem: Controller = async (req, res, next) => {
     try {
+        const RestaurantId = req.params.resId;
+        if (!isValidObjectId(RestaurantId)) throw new ApiError(422, "Invalid Object id");
+        validEntity(RestaurantId, "Resturant id ");
+
+        const MenuId = req.params.menuId;
+        if (!isValidObjectId(MenuId)) throw new ApiError(422, "Invalid Object id");
+        validEntity(MenuId, "Menu id ");
+
+        const deletedMenu = await menuServices.deleteMenuItem(RestaurantId, MenuId);
+        return successResponse(res, "Menu item deleted successfully", deletedMenu, 200)
 
     } catch (error) {
-
+        next(error)
     }
 }

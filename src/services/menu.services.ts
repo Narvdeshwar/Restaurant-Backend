@@ -49,6 +49,12 @@ export const updateMenuItem = async (RestaurantId: string, MenuId: string, name?
     return updatedMenuItem
 }
 
-export const deleteMenuItem = async () => {
-
+export const deleteMenuItem = async (RestaurantId: string, MenuId: string) => {
+    const deletedMenu = await Menu.findOneAndUpdate(
+        { RestaurantId, "items._id": MenuId },
+        { $pull: { items: { _id: MenuId } } },
+        { new: true }
+    )
+    if (!deletedMenu) throw new ApiError(404, "Menu id not found")
+    return deletedMenu
 }
