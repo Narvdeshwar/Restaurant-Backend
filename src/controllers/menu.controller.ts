@@ -31,7 +31,19 @@ export const getAllMenuById: Controller = async (req, res, next) => {
         validEntity(RestaurantId, "Restaurant id")
 
         const menuList = await menuServices.getAllMenuById(RestaurantId)
-        return successResponse(res, "Menu list fetched successfully", menuList, 201)
+        return successResponse(res, "Menu list fetched successfully", menuList, 200)
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getMenuById: Controller = async (req, res, next) => {
+    try {
+        const MenuId = req.params.id;
+        if (!isValidObjectId(MenuId)) throw new ApiError(404, "Invalid Menu Id");
+        validEntity(MenuId, "Menu Id is invalid");
+        const menuList = await menuServices.getMenuById(MenuId)
+        return successResponse(res, "Menu list fetched successfully", menuList, 200);
     } catch (error) {
         next(error)
     }
