@@ -4,6 +4,7 @@ import * as menuServices from "@/services/menu.services"
 import { isValidObjectId } from "mongoose";
 import { ApiError } from "@/utils/ApiError";
 import { validEntity } from "@/utils/validEntity";
+import { menuItemDto } from "@/dto/menuitem.dto";
 
 export const createMenu: Controller = async (req, res, next) => {
     try {
@@ -46,5 +47,37 @@ export const getMenuById: Controller = async (req, res, next) => {
         return successResponse(res, "Menu list fetched successfully", menuList, 200);
     } catch (error) {
         next(error)
+    }
+}
+
+export const updateMenuItem: Controller = async (req, res, next) => {
+    try {
+        const RestaurantId = req.params.resId;
+        if (!isValidObjectId(RestaurantId)) throw new ApiError(422, "Invalid Object ID")
+        validEntity(RestaurantId, "Resturant id")
+
+        const menuId = req.params.menuId;
+        if (!isValidObjectId(menuId)) throw new ApiError(422, "Invalid Object ID")
+        validEntity(menuId, "Menu id")
+
+        const update: Partial<{ name: string, isAvailable: boolean, price: number, description: string }> = {}
+        const { name, isAvailable, price, description } = req.body as menuItemDto;
+        if (name) update.name = name;
+        if (typeof isAvailable !== 'undefined') update.isAvailable = isAvailable;
+        if (price) update.price = price;
+        if (description) update.description = description;
+        const updatedMenu = await menuServices.updateMenuItem(RestaurantId, menuId, name, isAvailable, price, description)
+        return successResponse(res, "Menu item updated successfully", updatedMenu, 200)
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const deleteMenuItem: Controller = async (req, res, next) => {
+    try {
+
+    } catch (error) {
+
     }
 }
