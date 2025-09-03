@@ -1,14 +1,14 @@
 import Menu from "../models/menu.models";
 import { ApiError } from "../utils/ApiError";
 
-interface itemsProps {
+interface ItemsProps {
     name: String,
     price: Number,
     description?: String,
     isAvailable?: Boolean
 }[]
-export const createMenu = async (title: string, items: itemsProps[], RestaurantId: string) => {
-    const menu = await Menu.findOneAndUpdate({ _id: RestaurantId, title },
+export const createMenu = async (title: string, items: ItemsProps[], RestaurantId: string) => {
+    const menu = await Menu.findOneAndUpdate({ RestaurantId, title },
         {
             $setOnInsert: { title, RestaurantId },
             $addToSet: { items: { $each: items } }
@@ -20,4 +20,10 @@ export const createMenu = async (title: string, items: itemsProps[], RestaurantI
     );
     if (!menu) throw new ApiError(500, "Unable to add/update the menu");
     return menu;
+}
+
+export const getAllMenuById = async (RestaurantId: string) => {
+    const menu = await Menu.find({RestaurantId});
+    console.log("menu", menu)
+    return menu
 }
