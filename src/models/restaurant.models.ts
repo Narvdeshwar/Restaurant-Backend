@@ -26,7 +26,7 @@ export const restaurantSchema: Schema<IRestaurant> = new Schema({
         type: Number,
         default: 0
     }
-})
+}, { timestamps: true })
 
 const Restaurant: Model<IRestaurant> = mongoose.model<IRestaurant>("Restaurant", restaurantSchema)
 
