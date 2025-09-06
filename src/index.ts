@@ -8,8 +8,10 @@ import authRouter from "./routes/auth.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import restaurantRoute from "./routes/restaurant.routes";
 import menuRoutes from "./routes/menu.routes";
+import cookieParser from "cookie-parser";
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/", authRouter);
 app.use("/", restaurantRoute)

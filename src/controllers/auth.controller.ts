@@ -22,12 +22,23 @@ export const signup: Controller = async (req, res, next) => {
 export const login: Controller = async (req, res, next) => {
   try {
     const { email, password } = req.body as loginDTO;
-    const user = await userServices.login({ email, password });
-    return successResponse(res, "Login successfull", user, 200)
+
+    // ✅ Your login service should return both user and token
+    const { user, token } = await userServices.login({ email, password });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000,
+    });
+
+    return successResponse(res, "Login successful", user, 200);
   } catch (error) {
-    return next(error)
+    return next(error);
   }
-}
+};
+
 
 export const getAllUser: Controller = async (req, res, next) => {
   try {
