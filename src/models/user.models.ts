@@ -17,8 +17,13 @@ const userSchema: Schema<IUser> = new Schema(
     email: {
       type: String,
       unique: true,
+      required: true
     },
-    password: String,
+    password: {
+      type: String,
+      select: false,
+      required: true
+    },
     role: {
       type: String,
       default: "user",

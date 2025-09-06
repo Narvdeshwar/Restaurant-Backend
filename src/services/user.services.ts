@@ -1,6 +1,8 @@
 import { loginDTO, signupDTO } from "../dto/auth.dto";
 import User from "../models/user.models";
 import { ApiError } from "../utils/ApiError";
+import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 import { validEntity } from "../utils/validEntity";
 
 export const createUser = async ({ name, email, password, role }: signupDTO) => {
@@ -12,10 +14,14 @@ export const createUser = async ({ name, email, password, role }: signupDTO) => 
 }
 
 export const login = async ({ email, password }: loginDTO) => {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
     if (!user) throw new ApiError(404, "user doesn't exits")
-    if (user.password != password) throw new ApiError(404, "You have entered the wrong password!")
-    return user;
+    const isMatch = await bcrypt.compareSync(password, user.password)
+    if (!isMatch) throw new ApiError(404, "You have entered the wrong password!")
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || "havethiswillbeword")
+    const userObj = user.toObject() as any;
+    delete userObj.password;
+    return { user: userObj, token };
 }
 
 export const getAllUser = async () => {
