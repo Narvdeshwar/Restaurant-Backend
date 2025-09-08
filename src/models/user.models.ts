@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role?: string;
+  isOtpVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -28,6 +29,10 @@ const userSchema: Schema<IUser> = new Schema(
       type: String,
       default: "user",
     },
+    isOtpVerified: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );
