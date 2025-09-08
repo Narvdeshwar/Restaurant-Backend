@@ -1,4 +1,3 @@
-import { Controller } from "@/types/expressRouteHandlerTypes";
 import { ApiError } from "@/utils/ApiError";
 import { NextFunction, Request, Response } from "express";
 
