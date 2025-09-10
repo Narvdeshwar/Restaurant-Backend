@@ -1,9 +1,9 @@
-import { loginDTO, signupDTO } from "../dto/auth.dto";
-import User from "../models/user.models";
-import { ApiError } from "../utils/ApiError";
+import { loginDTO, signupDTO } from "@/dto/auth.dto";
+import User from "@/models/user.models";
+import { ApiError } from "@/utils/ApiError";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
-import { validEntity } from "../utils/validEntity";
+import { validEntity } from "@/utils/validEntity";
 
 export const createUser = async ({ name, email, password, role }: signupDTO) => {
     // first check where the current email is already used ?
