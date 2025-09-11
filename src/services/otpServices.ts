@@ -6,11 +6,15 @@ export const otpGenerator = async () => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     console.log("OTP generated", otp);
     const hashedOTP = await bcrypt.hash(otp, 10);
-    return hashedOTP;
+    return { hashedOTP, otp };
 }
 
-export const storeOTP = () => {
-
+export const storeOTP = async (hashedOTP: string, userId: string) => {
+    if (!hashedOTP) throw new ApiError(404, "Otp is not available to store")
+    if (!userId) throw new ApiError(404, "User id does not exits")
+    const key = `otp:${userId}`
+    await redis.set(key, hashedOTP, { EX: 240 });
+    return true;
 }
 
 export const verifyOTP = async (otp: string, userId: string) => {
