@@ -4,7 +4,6 @@ import redis from "@/config/redisConfig"
 
 export const otpGenerator = async () => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    console.log("OTP generated", otp);
     const hashedOTP = await bcrypt.hash(otp, 10);
     return { hashedOTP, otp };
 }
@@ -22,6 +21,8 @@ export const verifyOTP = async (otp: string, userId: string) => {
     if (!otp) throw new ApiError(400, "OTP required for email verification")
 
     const key = `otp:${userId}`
+    const attemptKey = `attempts:${userId}`
+    const totalAttempts = 3;
     const hashedOTP = await redis.get(key)
     if (!hashedOTP) throw new ApiError(404, "Either OTP is expired or time exceed")
 
