@@ -14,7 +14,10 @@ export interface IUser extends Document {
 // Step 2: Define Schema with type
 const userSchema: Schema<IUser> = new Schema(
   {
-    name: String,
+    name: {
+      type: String,
+      required: true
+    },
     email: {
       type: String,
       unique: true,

@@ -4,7 +4,7 @@ import { ApiError } from "@/utils/ApiError";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { validEntity } from "@/utils/validEntity";
-import { otpGenerator } from "./otpServices";
+import { otpGenerator, storeOTP } from "./otpServices";
 
 export const createUser = async ({ name, email, password, role }: signupDTO) => {
     // first check where the current email is already used ?
@@ -12,6 +12,8 @@ export const createUser = async ({ name, email, password, role }: signupDTO) => 
     if (isEmailRegistered) throw new ApiError(409, "Email is already registered!");
     const user = await User.create({ email, password, name, role })
     const { hashedOTP, otp } = await otpGenerator();
+    const isOtpStored = await storeOTP(hashedOTP, user._id)
+    if (!isOtpStored) throw new ApiError(404, "Unable to store the otp")
     console.log("testing the hashed otp", hashedOTP, "otp", otp);
     return user;
 }

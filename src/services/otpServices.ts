@@ -1,6 +1,6 @@
 import { ApiError } from "@/utils/ApiError";
 import bcrypt from "bcryptjs"
-import redis from "@/config/redisConfig"
+import { getRedisClient } from "@/config/redisConfig"
 
 export const otpGenerator = async () => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -9,26 +9,28 @@ export const otpGenerator = async () => {
 }
 
 export const storeOTP = async (hashedOTP: string, userId: string) => {
+    const client = await getRedisClient();
     if (!hashedOTP) throw new ApiError(404, "Otp is not available to store")
     if (!userId) throw new ApiError(404, "User id does not exits")
     const key = `otp:${userId}`
-    await redis.set(key, hashedOTP, { EX: 240 });
+    await client.set(key, hashedOTP, { EX: 240 });
     return true;
 }
 
 export const verifyOTP = async (otp: string, userId: string) => {
+    const client = await getRedisClient();
     if (!userId) throw new ApiError(400, "User id is required.")
     if (!otp) throw new ApiError(400, "OTP required for email verification")
 
     const key = `otp:${userId}`
     const attemptKey = `attempts:${userId}`
     const totalAttempts = 3;
-    const hashedOTP = await redis.get(key)
+    const hashedOTP = await client.get(key)
     if (!hashedOTP) throw new ApiError(404, "Either OTP is expired or time exceed")
 
     const isOtpMatched = await bcrypt.compare(otp, hashedOTP)
     if (!isOtpMatched) throw new ApiError(422, "OTP is invalid")
 
-    await redis.del(key)
+    await client.del(key)
     return true;
 }
