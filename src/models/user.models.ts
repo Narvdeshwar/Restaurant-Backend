@@ -1,7 +1,8 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
+import mongoose, { Document, Model, ObjectId, Schema } from "mongoose";
 
 // Step 1: Defining interface for the document
 export interface IUser extends Document {
+  _id: ObjectId
   name: string;
   email: string;
   password: string;

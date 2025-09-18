@@ -1,6 +1,7 @@
 import { ApiError } from "@/utils/ApiError";
 import bcrypt from "bcryptjs"
 import { getRedisClient } from "@/config/redisConfig"
+import { ObjectId } from "mongoose";
 
 export const otpGenerator = async () => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();

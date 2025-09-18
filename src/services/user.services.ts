@@ -12,7 +12,7 @@ export const createUser = async ({ name, email, password, role }: signupDTO) => 
     if (isEmailRegistered) throw new ApiError(409, "Email is already registered!");
     const user = await User.create({ email, password, name, role })
     const { hashedOTP, otp } = await otpGenerator();
-    const isOtpStored = await storeOTP(hashedOTP, user._id)
+    const isOtpStored = await storeOTP(hashedOTP, user._id.toString())
     if (!isOtpStored) throw new ApiError(404, "Unable to store the otp")
     console.log("testing the hashed otp", hashedOTP, "otp", otp);
     return user;
