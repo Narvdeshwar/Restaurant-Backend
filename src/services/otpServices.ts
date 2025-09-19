@@ -15,6 +15,7 @@ export const storeOTP = async (hashedOTP: string, userId: string) => {
     if (!userId) throw new ApiError(404, "User id does not exits")
     const key = `otp:${userId}`
     await client.set(key, hashedOTP, { EX: 240 });
+    console.log("set hashed otp", await client.get(key))
     return true;
 }
 
