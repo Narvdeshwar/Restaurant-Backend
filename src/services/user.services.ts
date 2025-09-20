@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { validEntity } from "@/utils/validEntity";
 import { otpGenerator, storeOTP } from "./otpServices";
+import { sendOtpEmail } from "@/integrations/emailSenderBrevo";
 
 export const createUser = async ({ name, email, password, role }: signupDTO) => {
     // first check where the current email is already used ?
@@ -15,8 +16,11 @@ export const createUser = async ({ name, email, password, role }: signupDTO) => 
     const isOtpStored = await storeOTP(hashedOTP, user._id.toString())
     if (!isOtpStored) throw new ApiError(404, "Unable to store the otp")
     console.log("testing the hashed otp", hashedOTP, "otp", otp);
+    // ! Todo Send OTP using the SMPTP 
     return user;
 }
+
+
 
 export const login = async ({ email, password }: loginDTO) => {
     const user = await User.findOne({ email }).select("+password");
