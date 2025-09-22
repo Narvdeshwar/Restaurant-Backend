@@ -20,9 +20,6 @@ export const createUser = async ({ name, email, password, role }: signupDTO) => 
     return user;
 }
 
-export const verifyPassword=async()=>{
-
-}
 
 export const login = async ({ email, password }: loginDTO) => {
     const user = await User.findOne({ email }).select("+password");

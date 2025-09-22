@@ -5,6 +5,8 @@ import { Controller } from "../types/expressRouteHandlerTypes";
 import { isValidObjectId } from "mongoose";
 import bcrypt from 'bcryptjs'
 import { ApiError } from "../utils/ApiError";
+import { validEntity } from "@/utils/validEntity";
+import { verifyOTP } from "@/services/otpServices";
 
 export const signup: Controller = async (req, res, next) => {
   try {
@@ -18,6 +20,18 @@ export const signup: Controller = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const verifyOtp: Controller = async (req, res, next) => {
+  try {
+    const { userId, otp } = req.body;
+    if (isValidObjectId(userId)) throw new ApiError(404, "User ID is required")
+    validEntity(otp, "OTP is required!")
+    if (otp.length === 6) throw new ApiError(404, "6 digit OTP is required")
+    const res = await verifyOTP(otp, userId);
+  } catch (error) {
+    next(error)
+  }
+}
 
 export const login: Controller = async (req, res, next) => {
   try {
