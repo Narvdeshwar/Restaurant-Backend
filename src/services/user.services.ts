@@ -4,22 +4,41 @@ import { ApiError } from "@/utils/ApiError";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { validEntity } from "@/utils/validEntity";
-import { otpGenerator, storeOTP } from "./otpServices";
+import { otpGenerator, storeOTP, verifyOTP } from "./otpServices";
 import { sendOtpEmail } from "@/integrations/emailSenderBrevo";
 
 export const createUser = async ({ name, email, password, role }: signupDTO) => {
-    // first check where the current email is already used ?
-    const isEmailRegistered = await User.findOne({ email });
-    if (isEmailRegistered) throw new ApiError(409, "Email is already registered!");
-    const user = await User.create({ email, password, name, role })
-    const { hashedOTP, otp } = await otpGenerator();
-    const isOtpStored = await storeOTP(hashedOTP, user._id.toString())
-    if (!isOtpStored) throw new ApiError(404, "Unable to store the otp")
-    console.log("testing the hashed otp", hashedOTP, "otp", otp);
-    // ! Todo Send OTP using the SMPTP 
-    return user;
-}
+  console.log("👉 createUser called with", email);
 
+  const isEmailRegistered = await User.findOne({ email });
+  if (isEmailRegistered) throw new ApiError(409, "Email is already registered!");
+
+  console.log("✅ Email not registered, creating user");
+  const user = await User.create({ email, password, name, role });
+
+  const { hashedOTP, otp } = await otpGenerator();
+  console.log("🎯 Generated OTP:", otp);
+
+  const isOtpStored = await storeOTP(hashedOTP, user._id.toString());
+  console.log("Redis store result:", isOtpStored);
+
+  if (!isOtpStored) throw new ApiError(404, "Unable to store the otp");
+
+  return user;
+};
+
+
+export const VerifyUserOtp = async (userId: string, otp: string) => {
+    await verifyOTP(userId, otp)
+    const user = await User.findByIdAndUpdate({ _id: userId }, {
+        $set: {
+            isOtpVerified: true
+        }
+    }, { new: true })
+    if (!user) throw new ApiError(404, "User not found!")
+    return user
+
+}
 
 export const login = async ({ email, password }: loginDTO) => {
     const user = await User.findOne({ email }).select("+password");
