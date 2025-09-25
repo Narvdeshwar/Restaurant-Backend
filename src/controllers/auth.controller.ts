@@ -6,7 +6,6 @@ import { isValidObjectId } from "mongoose";
 import bcrypt from 'bcryptjs'
 import { ApiError } from "../utils/ApiError";
 import { validEntity } from "@/utils/validEntity";
-import { verifyOTP } from "@/services/otpServices";
 
 export const signup: Controller = async (req, res, next) => {
   try {
@@ -14,7 +13,6 @@ export const signup: Controller = async (req, res, next) => {
     const { name, email, password, role } = req.body as signupDTO;
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log("hashed password", hashedPassword);
-
     const user = await userServices.createUser({ name, email, password: hashedPassword, role });
     return successResponse(res, "User created successfully", user, 201);
   } catch (error) {
@@ -28,7 +26,7 @@ export const verifyOtp: Controller = async (req, res, next) => {
     if (!isValidObjectId(userId)) throw new ApiError(404, "User ID is required")
     validEntity(otp, "OTP is required!")
     if (otp.length !== 6) throw new ApiError(404, "6 digit OTP is required")
-    const verifiedUser = await userServices.VerifyUserOtp(otp, userId);
+    const verifiedUser = await userServices.VerifyUserOtp(userId, otp);
     return successResponse(res, "Your accound verified successfully", {
       id: verifiedUser._id,
       email: verifiedUser.email,

@@ -23,7 +23,9 @@ export const verifyOTP = async (userId: string, otp: string) => {
     if (!userId) throw new ApiError(400, "User id is required.")
     if (!otp) throw new ApiError(400, "OTP required for email verification")
     const key = `otp:${userId}`
+    console.log("key", key)
     const hashedOTP = await client.get(key)
+    console.log("hashed", hashedOTP)
     if (!hashedOTP) throw new ApiError(404, "OTP expired or not found")
 
     const isOtpMatched = await bcrypt.compare(otp, hashedOTP)
