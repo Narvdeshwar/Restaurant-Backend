@@ -9,6 +9,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 import restaurantRoute from "./routes/restaurant.routes";
 import menuRoutes from "./routes/menu.routes";
 import cookieParser from "cookie-parser";
+import logger from "@/utils/logger";
 
 app.use(express.json());
 app.use(cookieParser());
@@ -26,6 +27,6 @@ app.use(errorHandler);
     process.exit(1);
   }
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    logger.info(`Server is running on http://localhost:${PORT}`);
   });
 })();
