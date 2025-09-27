@@ -1,10 +1,10 @@
-import { loginDTO, signupDTO } from "../dto/auth.dto";
-import { successResponse } from "../utils/response";
-import * as userServices from "../services/user.services"
-import { Controller } from "../types/expressRouteHandlerTypes";
+import { loginDTO, signupDTO } from "@/dto/auth.dto";
+import { successResponse } from "@/utils/response";
+import * as userServices from "@/services/user.services"
+import { Controller } from "@/types/expressRouteHandlerTypes";
 import { isValidObjectId } from "mongoose";
 import bcrypt from 'bcryptjs'
-import { ApiError } from "../utils/ApiError";
+import { ApiError } from "@/utils/ApiError";
 import { validEntity } from "@/utils/validEntity";
 
 export const signup: Controller = async (req, res, next) => {
@@ -49,7 +49,6 @@ export const login: Controller = async (req, res, next) => {
     return next(error);
   }
 };
-
 
 export const getAllUser: Controller = async (req, res, next) => {
   try {
