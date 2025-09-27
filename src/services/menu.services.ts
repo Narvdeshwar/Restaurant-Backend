@@ -21,7 +21,6 @@ export const createMenu = async (title: string, items: menuItemDto[], Restaurant
 export const getAllMenuById = async (RestaurantId: string) => {
     const menu = await Menu.find({ RestaurantId });
     if (!menu || menu.length === 0) throw new ApiError(404, "No restaurant menu found");
-    // `console.log("menu", menu)
     return menu
 }
 

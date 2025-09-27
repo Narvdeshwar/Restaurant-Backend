@@ -1,5 +1,5 @@
-import Restaurant from "../models/restaurant.models"
-import { ApiError } from "../utils/ApiError";
+import Restaurant from "@/models/restaurant.models"
+import { ApiError } from "@/utils/ApiError";
 
 export const createRestaurant = async (name: string, address: string, cuisine: string, rating?: number) => {
     const restaurant = await Restaurant.create({ name, address, cuisine, rating: rating ?? 0 })

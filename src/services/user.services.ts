@@ -5,26 +5,25 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { validEntity } from "@/utils/validEntity";
 import { otpGenerator, storeOTP, verifyOTP } from "./otpServices";
-import { sendOtpEmail } from "@/integrations/emailSenderBrevo";
 
 export const createUser = async ({ name, email, password, role }: signupDTO) => {
-  console.log("👉 createUser called with", email);
 
-  const isEmailRegistered = await User.findOne({ email });
-  if (isEmailRegistered) throw new ApiError(409, "Email is already registered!");
 
-  console.log("✅ Email not registered, creating user");
-  const user = await User.create({ email, password, name, role });
+    const isEmailRegistered = await User.findOne({ email });
+    if (isEmailRegistered) throw new ApiError(409, "Email is already registered!");
 
-  const { hashedOTP, otp } = await otpGenerator();
-  console.log("🎯 Generated OTP:", otp);
 
-  const isOtpStored = await storeOTP(hashedOTP, user._id.toString());
-  console.log("Redis store result:", isOtpStored);
+    const user = await User.create({ email, password, name, role });
 
-  if (!isOtpStored) throw new ApiError(404, "Unable to store the otp");
+    const { hashedOTP, otp } = await otpGenerator();
+    console.log("Current OTP:", otp);
 
-  return user;
+    const isOtpStored = await storeOTP(hashedOTP, user._id.toString());
+
+
+    if (!isOtpStored) throw new ApiError(404, "Unable to store the otp");
+
+    return user;
 };
 
 

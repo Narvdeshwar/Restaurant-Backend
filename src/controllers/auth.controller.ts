@@ -9,10 +9,10 @@ import { validEntity } from "@/utils/validEntity";
 
 export const signup: Controller = async (req, res, next) => {
   try {
-    console.log("create")
+
     const { name, email, password, role } = req.body as signupDTO;
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("hashed password", hashedPassword);
+    ;
     const user = await userServices.createUser({ name, email, password: hashedPassword, role });
     return successResponse(res, "User created successfully", user, 201);
   } catch (error) {
