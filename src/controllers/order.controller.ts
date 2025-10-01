@@ -5,7 +5,7 @@ import { successResponse } from "@/utils/response";
 export const createOrder: Controller = async (req, res, next) => {
     try {
         const { userId, restaurantId, items } = req.body;
-        const orders = await order()
+        const orders = await order(userId,restaurantId,items)
         return successResponse(res, "Order received successfully", orders)
     } catch (error) {
         next(error)
