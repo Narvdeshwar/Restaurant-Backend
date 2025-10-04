@@ -9,7 +9,7 @@ interface Iorder extends Document {
         quantity: number
     }[],
     totalPrice: number,
-    status: "pending" | "confirmed" | "preparing" | "delivered" | "cancelled",
+    status?: "pending" | "confirmed" | "preparing" | "delivered" | "cancelled",
     createdAt: Date,
     deletedAt: Date
 }
