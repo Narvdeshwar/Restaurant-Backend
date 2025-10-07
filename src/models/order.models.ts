@@ -14,7 +14,7 @@ interface Iorder extends Document {
     deletedAt: Date
 }
 
-const OrderSchema: Schema<Iorder> = new mongoose.Model({
+const OrderSchema: Schema<Iorder> = new mongoose.Schema({
     userId: { type: Schema.ObjectId, ref: "User", required: true },
     restaurantId: { type: Schema.ObjectId, ref: "Restaurant", required: true },
     items: [{
